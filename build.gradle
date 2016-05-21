@@ -1,0 +1,74 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath group: 'com.jfrog.bintray.gradle', name: 'gradle-bintray-plugin', version: '1.6'
+    }
+}
+
+group 'io.cify'
+version '0.4.0'
+
+apply plugin: 'groovy'
+apply plugin: 'java'
+apply plugin: 'checkstyle'
+apply plugin: 'maven-publish'
+apply plugin: 'com.jfrog.bintray'
+
+sourceCompatibility = 1.8
+
+repositories {
+    jcenter()
+    mavenCentral()
+    mavenLocal()
+}
+
+dependencies {
+    compile localGroovy()
+    compile gradleApi()
+
+    //Gradle plugin dependencies
+    compile group: 'org.codehaus.gpars', name: 'gpars', version: '1.1.0'
+
+    //Framework dependencies
+    compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.20'
+    compile group: 'ch.qos.logback', name: 'logback-core', version: '1.1.7'
+    compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.1.7'
+
+    compile group: 'org.seleniumhq.selenium', name: 'selenium-java', version: '2.53.0'
+    compile group: 'io.appium', name: 'java-client', version: '3.4.1'
+    compile group: 'info.cukes', name: 'cucumber-java', version: '1.2.4'
+    compile group: 'net.masterthought', name: 'cucumber-reporting', version: '2.1.0'
+    compile group: 'org.hamcrest', name: 'hamcrest-all', version: '1.3'
+}
+
+checkstyle {
+    toolVersion = "6.18"
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.13'
+}
+
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+        }
+    }
+}
+
+bintray {
+    user = project.hasProperty('bintrayUser') ? project.bintrayUser : System.getenv('BINTRAY_USER')
+    key = project.hasProperty('bintrayKey') ? project.bintrayKey : System.getenv('BINTRAY_KEY')
+    publications = ['mavenJava']
+    pkg {
+        repo = group
+        name = rootProject.name
+        userOrg = 'fobsolutions'
+        vcsUrl = 'https://bitbucket.org/fobsolutions/cify-framework'
+        licenses = ['Apache-2.0']
+    }
+}
