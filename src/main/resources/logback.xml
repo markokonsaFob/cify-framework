@@ -13,7 +13,7 @@
 
     <appender name="FILE" class="ch.qos.logback.core.FileAppender">
         <prudent>true</prudent>
-        <file>out/${BUILD_ID}/${TASK_NAME}.log</file>
+        <file>build/cify/log/${TASK_NAME}.log</file>
         <encoder>
             <pattern>%date{HH:mm:ss.SSS} %-10([%marker]) %message%n%ex{full}</pattern>
         </encoder>

@@ -8,7 +8,7 @@ import org.gradle.api.tasks.TaskAction
 
 class ReportTask extends DefaultTask {
 
-    public File reportsDir = new File("${project.buildDir}/reports/cify")
+    public File reportsDir = new File("${project.buildDir}/cify/reports")
     public File htmlDir = new File("${reportsDir}/html")
 
 
