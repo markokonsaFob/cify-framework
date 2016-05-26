@@ -10,16 +10,18 @@ import org.openqa.selenium.TakesScreenshot;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import static io.cify.framework.core.TestManager.getDevice;
 
 public class ScreenshotPlugin implements Reporter, Formatter {
 
-    private static String SCREENSHOTS_PATH = "/build/reports/cify/screenshots/";
+    private static final String SCREENSHOTS_PATH = "/build/cify/screenshots/";
 
     private Scenario scenario;
-    private Feature feature;
+    private Step step;
 
     @Override
     public void before(Match match, Result result) {
@@ -65,7 +67,7 @@ public class ScreenshotPlugin implements Reporter, Formatter {
 
     @Override
     public void feature(Feature feature) {
-        this.feature = feature;
+
     }
 
     @Override
@@ -95,7 +97,7 @@ public class ScreenshotPlugin implements Reporter, Formatter {
 
     @Override
     public void step(Step step) {
-
+        this.step = step;
     }
 
     @Override
@@ -131,18 +133,30 @@ public class ScreenshotPlugin implements Reporter, Formatter {
     }
 
     private String screenshotFileName() {
-        return scenario.getName().replace(" ", "_") + "_" + System.getProperty("TASK_NAME") + ".png";
+
+        StringBuilder name = new StringBuilder();
+        name.append(step.getName().replace(" ", "_"));
+
+        name.append("[");
+        String device = getDevice().getCombo().getPlatform().toString();
+        if (device != null) {
+            name.append(device.toLowerCase());
+            name.append("_");
+        }
+
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+        name.append(formatter.format(new Date()));
+        name.append("]");
+
+        name.append(".png");
+        return name.toString();
     }
 
     private String screenshotPath() {
         String screenshotPath = System.getProperty("user.dir")
                 + SCREENSHOTS_PATH + "/" + System.getProperty("TASK_NAME") + "/";
-        String device = getDevice().getCombo().getPlatform().toString();
 
-        if (device != null) {
-            // Put screenshots to designated folder based on device platform (Android, iOS, browser)
-            screenshotPath += "/" + device.toLowerCase() + "/";
-        }
+        screenshotPath += "/" + scenario.getName() + "/";
         return screenshotPath;
     }
 }

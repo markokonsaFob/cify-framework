@@ -42,7 +42,7 @@ class GradleCucumberTask extends JavaExec {
         }
 
         methodArgs << '--plugin'
-        methodArgs << "json:${project.buildDir}/reports/cify/${taskId}.json"
+        methodArgs << "json:${project.buildDir}/cify/reports/${taskId}.json"
 
         methodArgs << '--plugin'
         methodArgs << 'io.cify.framework.plugins.CucumberLogPlugin'

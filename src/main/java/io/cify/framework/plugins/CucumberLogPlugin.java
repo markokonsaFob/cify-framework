@@ -34,7 +34,6 @@ public class CucumberLogPlugin implements Reporter, Formatter {
         log.debug(marker, "STEP {}: {}", result.getStatus().toUpperCase(), step);
 
         if (result.getStatus().equals("failed")) {
-            log.debug(marker, "ERROR MSG: {}", result.getErrorMessage());
             log.debug(marker, "ERROR: ", result.getError());
         }
         nrOfResult += 1;
